@@ -7,7 +7,7 @@ import com.andy.andyyohanes.data.network.response.UserResponse
 class UserRepository(
     private val api: MyApi
 ) : SafeApiRequest() {
-    suspend fun searchUser(keyword: String) : UserResponse {
-        return apiRequest { api.searchUser(keyword) }
+    suspend fun searchUser(keyword: String, page: Int) : UserResponse {
+        return apiRequest { api.searchUser(keyword, page) }
     }
 }

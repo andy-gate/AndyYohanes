@@ -50,21 +50,33 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_results"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                android:layout_height="match_parent">
+
             <ProgressBar
                     android:id="@+id/pb_loading"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    android:layout_centerInParent="true"/>
 
-        </LinearLayout>
+            <LinearLayout
+                    android:id="@+id/ll_no_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:visibility="gone">
+                <ImageView
+                        android:src="@drawable/no_data_found"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+            </LinearLayout>
 
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_results"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+        </RelativeLayout>
     </LinearLayout>
 </layout>

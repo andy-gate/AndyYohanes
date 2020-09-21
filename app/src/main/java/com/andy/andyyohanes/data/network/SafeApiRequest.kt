@@ -11,17 +11,20 @@ abstract class SafeApiRequest {
         if(response.isSuccessful){
             return response.body()!!
         } else {
+            val errorCode = response.code()
             val error = response.errorBody()?.string()
             val message = StringBuilder()
-            error?.let{
-                try{
-                    message.append(JSONObject(it).getString("message"))
-                } catch(e: JSONException){
+            if(errorCode == 403)
+                message.append("API calls have a limit, please wait")
+            else {
+                error?.let {
+                    try {
+                        message.append(JSONObject(it).getString("message"))
+                    } catch (e: JSONException) {
 
+                    }
                 }
-                message.append('\n')
             }
-            message.append("Error code: ${response.code()}")
 
             throw ApiException(message.toString())
         }

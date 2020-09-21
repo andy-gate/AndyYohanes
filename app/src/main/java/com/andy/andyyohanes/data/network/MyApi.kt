@@ -11,7 +11,8 @@ import retrofit2.http.Query
 interface MyApi {
     @GET("search/users")
     suspend fun searchUser(
-        @Query("q") keyword: String?
+        @Query("q") keyword: String?,
+        @Query("page") page: Int?
     ) : Response<UserResponse>
 
     companion object{

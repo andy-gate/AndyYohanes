@@ -1,19 +1,11 @@
 package com.andy.andyyohanes.ui
 
-import android.text.Editable
-import android.widget.ImageView
-import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.andy.andyyohanes.data.repositories.UserRepository
 import com.andy.andyyohanes.util.ApiException
 import com.andy.andyyohanes.util.Coroutines
 import com.andy.andyyohanes.util.NoInternetException
-import com.andy.andyyohanes.util.lazyDeferred
-import com.bumptech.glide.Glide
-import android.text.TextWatcher
-
 
 
 class MainViewModel(
@@ -23,18 +15,17 @@ class MainViewModel(
 
     var mainListener: MainListener? = null
 
-//    private val searchObserver = Observer<String> {
-//        onSearchChanged(it)
-//    }
+    var page = 1
 
-//    init {
-//        search.observeForever(searchObserver)
-//    }
+    lateinit var keyword : String
 
-    fun onSearchUser(keyword: String){
+    fun onSearchUser(){
+        page=1
+        keyword = search.value.toString()
+        mainListener?.onStarted()
         Coroutines.main{
             try{
-                val userResponse = repository.searchUser(keyword)
+                val userResponse = repository.searchUser(keyword, page)
                 userResponse.let {
                     mainListener?.onSuccess(it)
                     return@main
@@ -47,7 +38,21 @@ class MainViewModel(
         }
     }
 
-//    fun onSearchChanged(keyword: String){
-//        onSearchUser(keyword)
-//    }
+    fun onLoadMore(){
+        mainListener?.onStarted()
+        Coroutines.main{
+            try{
+                val userResponse = repository.searchUser(keyword, page+1)
+                userResponse.let {
+                    mainListener?.onSuccessLoadMore(it)
+                    page = page+1
+                    return@main
+                }
+            } catch (e: ApiException) {
+                mainListener?.onFailure(e.message!!)
+            } catch (e: NoInternetException){
+                mainListener?.onFailure(e.message!!)
+            }
+        }
+    }
 }
